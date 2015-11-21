@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "race-of-dragons"
+    },
+    "race-of-dragons": {
+      "applicationId": "IzWIS38W3Mq00bO4jW364cBM3NrRGAfWgd6ravXS"
+    }
+  }
+}
