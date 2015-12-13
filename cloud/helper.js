@@ -116,3 +116,50 @@ exports.meregeData = function(serverData, data2) {
 			
 	return result;
 };
+
+/**
+ * saveData helper
+ * 
+ */
+exports.saveData = function(serverData, data2) {
+	var result = serverData;
+	
+	if (data2.level != null)
+		result.set("level",  data2.level);
+	if (data2.gold != null)
+		result.set("gold", data2.gold);
+	if (data2.gem != null)
+		result.set("gem", data2.gem);
+	if (data2.exp != null)
+		result.set("exp", data2.exp);
+	if (data2.elo != null)
+		result.set("elo", data2.elo);
+	if (data2.played != null)
+		result.set("played", data2.played);
+	if (data2.win != null)
+		result.set("win", data2.win);
+	
+	if (serverData.get("name") == null) {
+		if (data2.name != null) {
+			result.set("name", data2.name);
+		}
+	}			
+		
+	if (data2.friends != null) {
+		result.set("friends", data2.friends);
+	}
+	
+	if (data2.dragons != null) {
+		result.set("dragons", data2.dragons);
+	}
+
+	if (data2.items != null) {
+		result.set("items", data2.items);
+	}
+		
+	if (data2.emojis != null) {
+		result.set("emojis", data2.emojis);
+	}
+			
+	return result;
+};

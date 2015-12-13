@@ -144,6 +144,7 @@ Parse.Cloud.define("getFriendList", function(request, response) {
             var friendData = results[i].get("userData");            
             
             var friendItem = {
+              id: results[i].id,
               name: friendData.get("name"),
               avatarUrl: friendData.get("avatarUrl"),
               level: friendData.get("level"),
@@ -162,7 +163,37 @@ Parse.Cloud.define("getFriendList", function(request, response) {
   }); 
 });
 
-
+/**
+ * function name: saveUserData
+ * input: userdata
+ */
+Parse.Cloud.define("saveUserData", function(request, response) {
+  var saveFunc = require('cloud/helper.js').saveData;
+  
+  var localData = request.params.data;
+  var currentUser = request.user;
+  
+  currentUser.get("userData").fetch({
+    success: function(data) {
+      data = saveFunc(data, localData);
+      
+      data.save({
+        success: function(data) {
+          console.log("Save Data success!");
+          response.success(data);
+        },
+        error: function(data, error) {
+          response.error("Save Data fail! Error: " + error.message);
+        }
+      });
+      
+    },
+    error: function(data, error) {
+      response.error("Fetch Data got error: " + error.message);
+    }
+  })
+  
+});
 
 /**
  * Triger
