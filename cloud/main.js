@@ -164,6 +164,62 @@ Parse.Cloud.define("getFriendList", function(request, response) {
 });
 
 /**
+ * function name: getSuggestFriends
+ * input: userId
+ * output: friend list
+ */
+Parse.Cloud.define("getSuggestFriends", function(request, response) {
+  var shuffle = require('cloud/helper.js').shuffle;
+  
+  var currentUser = request.user;
+  
+  currentUser.get("userData").fetch().then(function(data) {
+    var friends = data.get("friends");
+    
+    var userQuery = new Parse.Query("User");
+    userQuery.include("userData");
+    userQuery.notContainedIn("objectId", friends);
+      
+      userQuery.find({
+        success: function(results) {
+          
+          var friendList = [];
+          for (var i = 0; i < results.length; i++) {
+            var friendData = results[i].get("userData");            
+            
+            var friendItem = {
+              id: results[i].id,
+              name: friendData.get("name"),
+              avatarUrl: friendData.get("avatarUrl"),
+              level: friendData.get("level"),
+              rank: friendData.get("rank"),
+              win: friendData.get("win"),
+              played: friendData.get("played")
+            };
+            
+            friendList.push(friendItem);
+          }
+          
+          shuffle(friendList);
+          
+          var limit = 10;
+          if (limit > friendList.length)
+            limit = friendList.length;
+            
+          var limitedList = [];
+          for (var i = 0; i < limit; i++) {
+            var element = friendList[i];
+            limitedList.push(element);
+          }
+          
+          console.log("Get friend list success! ");
+          response.success(limitedList);
+        }
+      })
+  }); 
+});
+
+/**
  * function name: saveUserData
  * input: userdata
  */
