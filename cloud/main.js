@@ -252,6 +252,75 @@ Parse.Cloud.define("saveUserData", function(request, response) {
 });
 
 /**
+ * function name: updateUserData
+ * input: userdata
+ */
+Parse.Cloud.define("updateData", function(request, response) {  
+  var localData = request.params.data;
+  var currentUser = request.user;
+  
+  currentUser.get("userData").fetch({
+    success: function(data) {
+      
+      for (var key in localData) {
+        if (localData.hasOwnProperty(key)) {
+          var element = localData[key];
+          data.set(key, element);
+        }
+      }
+      
+      data.save({
+        success: function(data) {
+          console.log("Update Data success!");
+          response.success(data);
+        },
+        error: function(data, error) {
+          response.error("Update Data fail! Error: " + error.message);
+        }
+      });
+      
+    },
+    error: function(data, error) {
+      response.error("Fetch Data got error: " + error.message);
+    }
+  })
+  
+});
+
+/**
+ * function name: invite
+ * input: {
+ *  type: invite
+ *  room: roomName
+ *  from: playerName
+ *  to: id
+ * }
+ */
+Parse.Cloud.define("invite", function(request, response) {  
+  var query = new Parse.Query(Parse.Installation);
+  console.log(request.params);
+  query.equalTo("userId", request.params.to);
+  
+  Parse.Push.send({
+    where: query,
+    data: {
+      alert: request.params.from + " has invited you to race a match!",
+      title: "Race against me!",
+      room: request.params.room,
+      from: request.params.from
+    }
+  }, {
+    success: function() {
+      // Push was successful
+      response.success("Push was successful!");
+    },
+    error: function(error) {
+      // Handle error
+      response.error("Parse push got error: " + error.message);
+    }
+  });
+});
+/**
  * Triger
  */
 

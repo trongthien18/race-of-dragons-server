@@ -22,11 +22,10 @@ exports.meregeData = function(serverData, data2) {
 	if (data2.win != null)
 		result.set("win", Math.max(serverData.get("win"), data2.win));
 	
-	if (serverData.get("name") == null) {
-		if (data2.name != null) {
-			result.set("name", data2.name);
-		}
-	}			
+	if (data2.name != null) {
+		result.set("name", data2.name);
+	}
+			
 	
 	// merge friends
 	if (data2.friends == null) {
@@ -139,10 +138,8 @@ exports.saveData = function(serverData, data2) {
 	if (data2.win != null)
 		result.set("win", data2.win);
 	
-	if (serverData.get("name") == null) {
-		if (data2.name != null) {
-			result.set("name", data2.name);
-		}
+	if (data2.name != null) {
+		result.set("name", data2.name);
 	}			
 		
 	if (data2.friends != null) {
@@ -167,4 +164,4 @@ exports.saveData = function(serverData, data2) {
 exports.shuffle = function(o) {
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
-}
+};
